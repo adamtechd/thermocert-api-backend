@@ -1,11 +1,19 @@
+// thermocert-api/routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const auth = require('../middlewares/auth');
+const userController = require('../controllers/userController'); // Importa o controller de usuário
+const authMiddleware = require('../middlewares/auth'); // Importa o middleware de auth
 
-router.post('/users', auth.verifyToken, auth.requireAdmin, userController.register);
+// Rota para o Login da Aplicação
+// @route   POST /api/auth/login
+// @desc    Autenticar usuário e obter token JWT
+// @access  Public
 router.post('/login', userController.login);
-router.get('/users', auth.verifyToken, auth.requireAdmin, userController.getUsers);
-router.patch('/users/:id/status', auth.verifyToken, auth.requireAdmin, userController.toggleUserStatus);
+
+// Rota para verificar o usuário logado (para persistência de sessão no frontend)
+// @route   GET /api/auth/me
+// @desc    Obter dados do usuário logado (requer token JWT)
+// @access  Private
+router.get('/me', authMiddleware.verifyToken, userController.getMe); // userController.getMe precisa existir
 
 module.exports = router;
