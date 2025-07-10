@@ -1,19 +1,19 @@
-// thermocert-api/routes/authRoutes.js
+// thermocert-api/routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController'); // Importa o controller de usuário
-const authMiddleware = require('../middlewares/auth'); // Importa o middleware de auth
+const userController = require('../controllers/userController');
+const authMiddleware = require('../middlewares/auth');
 
-// Rota para o Login da Aplicação
-// @route   POST /api/auth/login
-// @desc    Autenticar usuário e obter token JWT
-// @access  Public
-router.post('/login', userController.login);
+// Rota para Registrar um novo usuário (POST /api/users)
+// Protegida: Apenas administradores podem criar usuários após login
+router.post('/', authMiddleware.verifyToken, authMiddleware.requireAdmin, userController.register);
 
-// Rota para verificar o usuário logado (para persistência de sessão no frontend)
-// @route   GET /api/auth/me
-// @desc    Obter dados do usuário logado (requer token JWT)
-// @access  Private
-router.get('/me', authMiddleware.verifyToken, userController.getMe); // userController.getMe precisa existir
+// Rota para Listar todos os usuários (GET /api/users)
+// Protegida: Apenas administradores podem listar usuários
+router.get('/', authMiddleware.verifyToken, authMiddleware.requireAdmin, userController.getUsers);
+
+// Rota para Ativar/Desativar um usuário (PATCH /api/users/:id/status)
+// Protegida: Apenas administradores podem alterar o status
+router.patch('/:id/status', authMiddleware.verifyToken, authMiddleware.requireAdmin, userController.toggleUserStatus);
 
 module.exports = router;
