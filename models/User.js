@@ -7,6 +7,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    email: { // Adicionado campo email
+        type: String,
+        required: true,
+        unique: true
+    },
     password: {
         type: String,
         required: true
@@ -22,6 +27,14 @@ const UserSchema = new mongoose.Schema({
     isAdmin: { 
         type: Boolean,
         default: false
+    },
+    permissions: { // Estrutura de permissões modulares
+        canEdit: { type: Boolean, default: false },
+        canGeneratePdf: { type: Boolean, default: false },
+        canGenerateDocx: { type: Boolean, default: false },
+        canGenerateExcel: { type: Boolean, default: false },
+        canAccessAdmin: { type: Boolean, default: false },
+        isTestMode: { type: Boolean, default: true } 
     },
     date: {
         type: Date,
