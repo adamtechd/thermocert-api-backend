@@ -1,9 +1,10 @@
+// thermocert-api/server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
-const authRoutes = require('./routes/authRoutes'); 
+const authRoutes = require('./routes/authRoutes'); // Certifique-se que está importado
 
 dotenv.config();
 const app = express();
@@ -15,8 +16,12 @@ app.use(cors({
 }));
 app.use(express.json()); 
 
+// --- CORREÇÃO AQUI ---
+// Monte authRoutes em /api/auth
 app.use('/api/auth', authRoutes); 
+// Monte userRoutes em /api/users
 app.use('/api/users', userRoutes); 
+// --- FIM DA CORREÇÃO ---
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
