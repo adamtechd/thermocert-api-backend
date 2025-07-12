@@ -9,9 +9,8 @@ const authRoutes = require('./routes/authRoutes');
 dotenv.config();
 const app = express();
 
-// Configuração CORS dinâmica para Vercel
 const allowedOrigins = [
-    'https://thermoquali-pro-frontend.vercel.app', // Domínio principal
+    'https://thermoquali-pro-frontend.vercel.app', 
     // Adicione outras URLs de preview da Vercel se necessário
     // Ex: 'https://thermoquali-pro-frontend-git-main-adams-projects-09247cef.vercel.app',
     //     'https://thermoquali-pro-frontend-fsnrpo0cr-adams-projects-09247cef.vercel.app',
@@ -19,8 +18,6 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Permite requisições sem origem (como Postman ou requisições do mesmo servidor)
-        // OU se a origem está na lista de permitidos
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
@@ -33,12 +30,10 @@ app.use(cors({
 
 app.use(express.json());
 
-// Rota raiz para testar se o servidor está online
 app.get('/', (req, res) => {
     res.send('Backend ThermoCert Pro está online!');
 });
 
-// Definição das rotas
 app.use('/api/auth', authRoutes); 
 app.use('/api/users', userRoutes); 
 
